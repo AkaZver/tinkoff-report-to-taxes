@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'io.freefair.lombok' version '5.3.3.3'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+}
+
+group = 'ru.a_z.tools'
+version = '1.0.0-SNAPSHOT'
+
+generateLombokConfig.enabled = false
+mainClassName = 'ru.a_z.tools.taxes.Main'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.1'
+    implementation 'org.apache.logging.log4j:log4j-jcl:2.14.1'
+    implementation 'org.dhatim:fastexcel:0.12.11'
+    implementation 'technology.tabula:tabula:1.0.4', {
+        exclude group: 'commons-logging'
+        exclude group: 'com.github.jai-imageio'
+        exclude group: 'com.google.code.gson'
+        exclude group: 'org.apache.pdfbox', module: 'jbig2-imageio'
+        exclude group: 'org.bouncycastle'
+        exclude group: 'org.slf4j'
+    }
+}
+
+application {
+    run {
+        if (project.hasProperty('inputPath') && project.hasProperty('exportType')) {
+            args = [project.property('inputPath'), project.property('exportType')]
+        }
+    }
+}
