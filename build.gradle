@@ -11,6 +11,8 @@ version = '1.0.1'
 
 generateLombokConfig.enabled = false
 mainClassName = 'ru.a_z.tools.taxes.Main'
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 
 repositories {
     mavenLocal()

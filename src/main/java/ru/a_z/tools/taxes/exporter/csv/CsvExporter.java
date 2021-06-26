@@ -49,7 +49,7 @@ public class CsvExporter implements Exporter {
             }
         } catch (IOException exception) {
             String message = "Не удалось обработать файл " + output;
-            throw new RuntimeException(message, exception);
+            throw new IllegalStateException(message, exception);
         }
 
         log.info("<< execute");

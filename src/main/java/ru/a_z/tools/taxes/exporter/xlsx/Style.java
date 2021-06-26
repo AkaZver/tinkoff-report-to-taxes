@@ -7,6 +7,8 @@ import org.dhatim.fastexcel.BorderStyle;
 import org.dhatim.fastexcel.Color;
 import org.dhatim.fastexcel.Worksheet;
 
+import static ru.a_z.tools.taxes.exporter.xlsx.Style.Constant.*;
+
 /**
  * Стили для ячеек XLSX
  */
@@ -18,8 +20,8 @@ public enum Style {
     HEADER((ws, row, col) -> ws
             .style(row, col)
             .borderStyle(BorderStyle.THIN)
-            .horizontalAlignment("center")
-            .verticalAlignment("center")
+            .horizontalAlignment(ALIGN_CENTER)
+            .verticalAlignment(ALIGN_CENTER)
             .fillColor(Color.GRAY2)
             .wrapText(true)
             .bold()
@@ -29,8 +31,8 @@ public enum Style {
     DATE((ws, row, col) -> ws
             .style(row, col)
             .borderStyle(BorderStyle.THIN)
-            .horizontalAlignment("center")
-            .verticalAlignment("center")
+            .horizontalAlignment(ALIGN_CENTER)
+            .verticalAlignment(ALIGN_CENTER)
             .format("dd.MM.yyyy")
             .set()
     ),
@@ -38,37 +40,37 @@ public enum Style {
     INTEGER((ws, row, col) -> ws
             .style(row, col)
             .borderStyle(BorderStyle.THIN)
-            .horizontalAlignment("right")
-            .verticalAlignment("center")
+            .horizontalAlignment(ALIGN_RIGHT)
+            .verticalAlignment(ALIGN_CENTER)
             .set()),
 
     BIG_DECIMAL((ws, row, col) -> ws
             .style(row, col)
             .borderStyle(BorderStyle.THIN)
-            .horizontalAlignment("right")
-            .verticalAlignment("center")
+            .horizontalAlignment(ALIGN_RIGHT)
+            .verticalAlignment(ALIGN_CENTER)
             .set()),
 
     STRING((ws, row, col) -> ws
             .style(row, col)
             .borderStyle(BorderStyle.THIN)
-            .horizontalAlignment("left")
-            .verticalAlignment("center")
+            .horizontalAlignment(ALIGN_LEFT)
+            .verticalAlignment(ALIGN_CENTER)
             .set()),
 
     FORMULA_WITH_NUMBER((ws, row, col) -> ws
             .style(row, col)
             .borderStyle(BorderStyle.THIN)
-            .horizontalAlignment("right")
-            .verticalAlignment("center")
+            .horizontalAlignment(ALIGN_RIGHT)
+            .verticalAlignment(ALIGN_CENTER)
             .format("0.00")
             .set()),
 
     FORMULA_WITH_PERCENT((ws, row, col) -> ws
             .style(row, col)
             .borderStyle(BorderStyle.THIN)
-            .horizontalAlignment("right")
-            .verticalAlignment("center")
+            .horizontalAlignment(ALIGN_RIGHT)
+            .verticalAlignment(ALIGN_CENTER)
             .format("0.00%")
             .set());
 
@@ -77,6 +79,12 @@ public enum Style {
     @FunctionalInterface
     interface StyleConsumer<A, B, C> {
         void accept(A a, B b, C c);
+    }
+
+    protected static class Constant {
+        protected static final String ALIGN_CENTER = "center";
+        protected static final String ALIGN_RIGHT = "right";
+        protected static final String ALIGN_LEFT = "left";
     }
 
 }
