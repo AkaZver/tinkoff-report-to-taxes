@@ -14,7 +14,6 @@ import technology.tabula.extractors.SpreadsheetExtractionAlgorithm;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -32,7 +31,6 @@ public class PdfImporter implements Importer {
         List<DividendPayment> payments;
 
         try (PDDocument document = PDDocument.load(input.toFile())) {
-            Predicate<List<RectangularTextContainer<?>>> isRowCorrect = cells -> cells.get(0).getText().matches(PDF_DATE_REGEX);
             DividendPaymentMapper mapper = new DividendPaymentMapper();
             ExtractionAlgorithm algorithm = new SpreadsheetExtractionAlgorithm();
             Iterable<Page> pages = () -> new ObjectExtractor(document).extract();
@@ -41,17 +39,21 @@ public class PdfImporter implements Importer {
                     .flatMap(page -> algorithm.extract(page).stream())
                     .flatMap(table -> table.getRows().stream())
                     .map(this::fetchCheckedRow)
-                    .filter(isRowCorrect)
+                    .filter(this::isRowCorrect)
                     .map(mapper::map)
                     .collect(Collectors.toList());
         } catch (IOException exception) {
             String message = "Не удалось обработать файл " + input;
-            throw new RuntimeException(message, exception);
+            throw new IllegalStateException(message, exception);
         }
 
         log.debug("-- execute: payments={}", payments);
         log.info("<< execute: paymentsSize={}", payments.size());
         return payments;
+    }
+
+    private boolean isRowCorrect(List<RectangularTextContainer<?>> cells) {
+        return cells.get(0).getText().matches(PDF_DATE_REGEX);
     }
 
     @SuppressWarnings("rawtypes")

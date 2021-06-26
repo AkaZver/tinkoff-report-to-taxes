@@ -7,6 +7,7 @@ import ru.a_z.tools.taxes.exporter.ExporterField;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
 /**
@@ -79,8 +80,8 @@ public class WorksheetWrapper {
         return value(accessor.get(), Style.DATE);
     }
 
-    public WorksheetWrapper integer(Supplier<Integer> accessor) {
-        return value(accessor.get(), Style.INTEGER);
+    public WorksheetWrapper integer(IntSupplier accessor) {
+        return value(accessor.getAsInt(), Style.INTEGER);
     }
 
     public WorksheetWrapper string(Supplier<String> accessor) {
