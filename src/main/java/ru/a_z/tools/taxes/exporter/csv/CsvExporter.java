@@ -48,7 +48,7 @@ public class CsvExporter implements Exporter {
                 csvPrinter.printRecord(fetchCsvRecord(payment));
             }
         } catch (IOException exception) {
-            String message = "Не удалось обработать файл " + output;
+            String message = "Не удалось обработать CSV-файл " + output;
             throw new IllegalStateException(message, exception);
         }
 

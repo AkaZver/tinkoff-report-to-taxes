@@ -48,7 +48,7 @@ public class DividendPaymentMapper {
     }
 
     private String fetchString(RectangularTextContainer<?> cell) {
-        return cell.getText(false);
+        return cell.getText().replaceAll("[\\r\\n]", " ");
     }
 
     private LocalDate fetchLocalDate(RectangularTextContainer<?> cell) {

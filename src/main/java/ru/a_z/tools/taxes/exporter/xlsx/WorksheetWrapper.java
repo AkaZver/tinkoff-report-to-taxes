@@ -1,6 +1,8 @@
 package ru.a_z.tools.taxes.exporter.xlsx;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.dhatim.fastexcel.Worksheet;
 import ru.a_z.tools.taxes.exporter.ExporterField;
@@ -14,9 +16,7 @@ import java.util.function.Supplier;
  * Обёртка над страницей XLSX для более удобной работы с {@link Worksheet}
  */
 @Getter
-@Setter
 @Log4j2
-@ToString
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class WorksheetWrapper {
 
@@ -28,7 +28,7 @@ public class WorksheetWrapper {
         return new WorksheetWrapper(ws);
     }
 
-    private WorksheetWrapper value(Object object, Style style) {
+    protected WorksheetWrapper value(Object object, Style style) {
         log.trace(">> value: object={}, style={}", object, style);
         style.getValue().accept(ws, row, col);
 

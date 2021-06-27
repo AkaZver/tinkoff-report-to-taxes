@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'jacoco'
     id 'application'
     id 'org.sonarqube' version '3.2.0'
     id 'io.freefair.lombok' version '5.3.3.3'
@@ -31,6 +32,13 @@ dependencies {
         exclude group: 'org.bouncycastle'
         exclude group: 'org.slf4j'
     }
+
+    testImplementation 'org.assertj:assertj-core:3.20.2'
+    testImplementation 'org.dhatim:fastexcel-reader:0.12.11'
+    testImplementation 'org.mockito:mockito-core:3.11.2'
+    testImplementation 'org.mockito:mockito-junit-jupiter:3.11.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.7.2'
 }
 
 application {
@@ -38,6 +46,24 @@ application {
         if (project.hasProperty('inputPath') && project.hasProperty('exportType')) {
             args = [project.property('inputPath'), project.property('exportType')]
         }
+    }
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+    systemProperty 'java.util.logging.config.file', "${buildDir}/resources/test/logging-test.properties"
+}
+
+java {
+    withSourcesJar()
+}
+
+jacocoTestReport {
+    dependsOn test
+
+    reports {
+        xml.enabled true
     }
 }
 

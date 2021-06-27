@@ -2,7 +2,7 @@ package ru.a_z.tools.taxes.exporter.xlsx;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.experimental.UtilityClass;
 import org.dhatim.fastexcel.BorderStyle;
 import org.dhatim.fastexcel.Color;
 import org.dhatim.fastexcel.Worksheet;
@@ -13,7 +13,6 @@ import static ru.a_z.tools.taxes.exporter.xlsx.Style.Constant.*;
  * Стили для ячеек XLSX
  */
 @Getter
-@ToString
 @RequiredArgsConstructor
 public enum Style {
 
@@ -81,6 +80,7 @@ public enum Style {
         void accept(A a, B b, C c);
     }
 
+    @UtilityClass
     protected static class Constant {
         protected static final String ALIGN_CENTER = "center";
         protected static final String ALIGN_RIGHT = "right";
