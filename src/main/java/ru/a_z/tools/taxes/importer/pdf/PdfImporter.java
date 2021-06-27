@@ -26,13 +26,14 @@ public class PdfImporter implements Importer {
 
     private static final String PDF_DATE_REGEX = "^\\d{2}\\.\\d{2}\\.\\d{4}$";
 
+    private final ExtractionAlgorithm algorithm = new SpreadsheetExtractionAlgorithm();
+    private final DividendPaymentMapper mapper = new DividendPaymentMapper();
+
     public List<DividendPayment> execute(Path input) {
         log.info(">> execute: input={}", input);
         List<DividendPayment> payments;
 
         try (PDDocument document = PDDocument.load(input.toFile())) {
-            DividendPaymentMapper mapper = new DividendPaymentMapper();
-            ExtractionAlgorithm algorithm = new SpreadsheetExtractionAlgorithm();
             Iterable<Page> pages = () -> new ObjectExtractor(document).extract();
 
             payments = StreamSupport.stream(pages.spliterator(), false)
@@ -45,6 +46,11 @@ public class PdfImporter implements Importer {
         } catch (IOException exception) {
             String message = "Не удалось обработать файл " + input;
             throw new IllegalStateException(message, exception);
+        }
+
+        if (payments.isEmpty()) {
+            String message = String.format("Файл %s не содержит записей о выплатах", input);
+            throw new IllegalStateException(message);
         }
 
         log.debug("-- execute: payments={}", payments);

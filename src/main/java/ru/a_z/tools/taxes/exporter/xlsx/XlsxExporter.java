@@ -2,9 +2,9 @@ package ru.a_z.tools.taxes.exporter.xlsx;
 
 import lombok.extern.log4j.Log4j2;
 import org.dhatim.fastexcel.Workbook;
-import ru.a_z.tools.taxes.model.DividendPayment;
 import ru.a_z.tools.taxes.exporter.Exporter;
 import ru.a_z.tools.taxes.exporter.ExporterField;
+import ru.a_z.tools.taxes.model.DividendPayment;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -27,12 +27,12 @@ public class XlsxExporter implements Exporter {
         try (OutputStream outputStream = Files.newOutputStream(output)) {
             Workbook workbook = new Workbook(outputStream, "tinkoff-report-to-taxes", null);
 
-            WorksheetWrapper builder = WorksheetWrapper
+            WorksheetWrapper wrapper = WorksheetWrapper
                     .with(workbook.newWorksheet("Main"))
                     .headers(ExporterField.values());
 
             for (DividendPayment payment : payments) {
-                builder.nextRow()
+                wrapper.nextRow()
                         .firstColumn()
                         .date(payment::getRegistryFixDate)
                         .date(payment::getPaymentDate)
@@ -42,18 +42,18 @@ public class XlsxExporter implements Exporter {
                         .string(payment::getIssuerCountry)
                         .bigDecimal(payment::getNumberOfSecurities)
                         .bigDecimal(payment::getPaymentPerPaper)
-                        .formulaWithNumber(fetchPaymentsWithTaxesFormula(builder.getRow()))
+                        .formulaWithNumber(fetchPaymentsWithTaxesFormula(wrapper.getRow()))
                         .bigDecimal(payment::getCommission)
                         .bigDecimal(payment::getTaxes)
-                        .formulaWithPercent(fetchTaxPercentFormula(builder.getRow()))
+                        .formulaWithPercent(fetchTaxPercentFormula(wrapper.getRow()))
                         .bigDecimal(payment::getTotalPaymentAmount)
                         .string(payment::getCurrency);
             }
 
-            builder.finish();
+            wrapper.finish();
             workbook.finish();
         } catch (IOException exception) {
-            String message = "Не удалось обработать файл " + output;
+            String message = "Не удалось обработать XLSX-файл " + output;
             throw new IllegalStateException(message, exception);
         }
 

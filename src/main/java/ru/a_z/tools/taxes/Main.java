@@ -52,7 +52,7 @@ public class Main {
         log.info("<< main");
     }
 
-    private static Exporter fetchExporter(String exportType) {
+    protected static Exporter fetchExporter(String exportType) {
         switch (exportType) {
             case CSV_TYPE:
                 return new CsvExporter();
