@@ -42,10 +42,10 @@ public class XlsxExporter implements Exporter {
                         .string(payment::getIssuerCountry)
                         .bigDecimal(payment::getNumberOfSecurities)
                         .bigDecimal(payment::getPaymentPerPaper)
-                        .formulaWithNumber(fetchPaymentsWithTaxesFormula(wrapper.getRow()))
                         .bigDecimal(payment::getCommission)
+                        .bigDecimal(payment::getAmountBeforeTax)
                         .bigDecimal(payment::getTaxes)
-                        .formulaWithPercent(fetchTaxPercentFormula(wrapper.getRow()))
+                        .formula(fetchTaxPercentFormula(wrapper.getRow()))
                         .bigDecimal(payment::getTotalPaymentAmount)
                         .string(payment::getCurrency);
             }
@@ -61,25 +61,14 @@ public class XlsxExporter implements Exporter {
     }
 
     /**
-     * Формула для получения суммы всех выплат по бумаге, включая неуплаченный налог.
-     * Примерный вид: $G2*$H2
-     *
-     * @param row Номер текущей строки
-     * @return Формула в формате Excel
-     */
-    private String fetchPaymentsWithTaxesFormula(int row) {
-        return String.format("$G%1$d*$H%1$d", row + 1);
-    }
-
-    /**
      * Формула для расчёта процента налога по бумаге.
-     * Примерный вид: ОКРУГЛ($K2/$I2; 1)
+     * Примерный вид: ОКРУГЛ($J2/$I2; 1)
      *
      * @param row Номер текущей строки
      * @return Формула в формате Excel
      */
     private String fetchTaxPercentFormula(int row) {
-        return String.format("ROUND($K%1$d/$I%1$d, 1)", row + 1);
+        return String.format("ROUND($K%1$d/$J%1$d, 1)", row + 1);
     }
 
 }

@@ -57,15 +57,7 @@ public enum Style {
             .verticalAlignment(ALIGN_CENTER)
             .set()),
 
-    FORMULA_WITH_NUMBER((ws, row, col) -> ws
-            .style(row, col)
-            .borderStyle(BorderStyle.THIN)
-            .horizontalAlignment(ALIGN_RIGHT)
-            .verticalAlignment(ALIGN_CENTER)
-            .format("0.00")
-            .set()),
-
-    FORMULA_WITH_PERCENT((ws, row, col) -> ws
+    FORMULA((ws, row, col) -> ws
             .style(row, col)
             .borderStyle(BorderStyle.THIN)
             .horizontalAlignment(ALIGN_RIGHT)
@@ -81,10 +73,10 @@ public enum Style {
     }
 
     @UtilityClass
-    protected static class Constant {
-        protected static final String ALIGN_CENTER = "center";
-        protected static final String ALIGN_RIGHT = "right";
-        protected static final String ALIGN_LEFT = "left";
+    static class Constant {
+        static final String ALIGN_CENTER = "center";
+        static final String ALIGN_RIGHT = "right";
+        static final String ALIGN_LEFT = "left";
     }
 
 }

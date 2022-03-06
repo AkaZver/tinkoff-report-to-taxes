@@ -25,6 +25,7 @@ public class DividendPayment {
     private BigDecimal numberOfSecurities;
     private BigDecimal paymentPerPaper;
     private BigDecimal commission;
+    private BigDecimal amountBeforeTax;
     private BigDecimal taxes;
     private BigDecimal totalPaymentAmount;
     private String currency;

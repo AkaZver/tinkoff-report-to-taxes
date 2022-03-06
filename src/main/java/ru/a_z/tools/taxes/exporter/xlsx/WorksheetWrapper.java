@@ -49,23 +49,15 @@ public class WorksheetWrapper {
         return this;
     }
 
-    private WorksheetWrapper formula(String formula, Style style) {
-        log.trace(">> formula: formula={}, style={}", formula, style);
+    public WorksheetWrapper formula(String text) {
+        log.trace(">> formula: text={}", text);
 
-        style.getValue().accept(ws, row, col);
-        ws.formula(row, col, formula);
+        Style.FORMULA.getValue().accept(ws, row, col);
+        ws.formula(row, col, text);
         ++col;
 
         log.trace("<< formula: this={}", this);
         return this;
-    }
-
-    public WorksheetWrapper formulaWithNumber(String formula) {
-        return formula(formula, Style.FORMULA_WITH_NUMBER);
-    }
-
-    public WorksheetWrapper formulaWithPercent(String formula) {
-        return formula(formula, Style.FORMULA_WITH_PERCENT);
     }
 
     public WorksheetWrapper headers(ExporterField[] exporterFields) {

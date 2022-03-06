@@ -37,7 +37,7 @@ class DividendPaymentMapperTest {
 
         List<RectangularTextContainer<?>> incorrectRowSize = Stream
                 .generate(() -> new Cell(1, 1, 1, 1))
-                .limit(13)
+                .limit(12)
                 .collect(Collectors.toList());
 
         return Stream.of(
@@ -51,7 +51,7 @@ class DividendPaymentMapperTest {
     private static List<RectangularTextContainer<?>> fetchIncorrectRow(int index, String value) {
         List<RectangularTextContainer<?>> correctRow = fetchRow(
                 "01.01.2021", "02.02.2021", "test", "Stock 1", "ISIN 1",
-                "США", "1", "1.00", "0.00", "0.00", "0.00", "USD"
+                "США", "1", "1.00", "0.00", "0.00", "0.00", "0.00", "USD"
         );
 
         correctRow.set(index, fetchCell(value));
