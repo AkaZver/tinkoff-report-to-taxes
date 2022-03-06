@@ -23,7 +23,7 @@ class PdfImporterTest {
     @DisplayName("Successful execution")
     void successfulExecution() {
         Path path = fetchClassPathResource("pdf/correct.pdf");
-        assertThat(importer.execute(path)).hasSize(52);
+        assertThat(importer.execute(path)).hasSize(35);
     }
 
     @ParameterizedTest(name = "[{index}] Failed execution with {0}")

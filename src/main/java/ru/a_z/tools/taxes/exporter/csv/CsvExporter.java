@@ -4,9 +4,9 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.QuoteMode;
-import ru.a_z.tools.taxes.model.DividendPayment;
 import ru.a_z.tools.taxes.exporter.Exporter;
 import ru.a_z.tools.taxes.exporter.ExporterField;
+import ru.a_z.tools.taxes.model.DividendPayment;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -37,10 +37,12 @@ public class CsvExporter implements Exporter {
                 .map(ExporterField::getValue)
                 .toArray(String[]::new);
 
-        CSVFormat csvFormat = CSVFormat.EXCEL
-                .withQuoteMode(QuoteMode.ALL)
-                .withHeader(header)
-                .withDelimiter(';');
+        CSVFormat csvFormat = CSVFormat.Builder
+                .create(CSVFormat.EXCEL)
+                .setQuoteMode(QuoteMode.ALL)
+                .setHeader(header)
+                .setDelimiter(';')
+                .build();
 
         try (BufferedWriter bufferedWriter = Files.newBufferedWriter(output, CP1251);
              CSVPrinter csvPrinter = new CSVPrinter(bufferedWriter, csvFormat)) {
@@ -62,8 +64,8 @@ public class CsvExporter implements Exporter {
         BigDecimal numberOfSecurities = payment.getNumberOfSecurities();
         BigDecimal taxes = payment.getTaxes();
 
-        BigDecimal paymentsWithTaxes = fetchPaymentsWithTaxes(paymentPerPaper, numberOfSecurities);
-        BigDecimal taxPercent = fetchTaxPercent(taxes, paymentsWithTaxes);
+        BigDecimal amountBeforeTax = payment.getAmountBeforeTax();
+        BigDecimal taxPercent = fetchTaxPercent(taxes, amountBeforeTax);
         String formattedTaxPercent = formatNumber(taxPercent.multiply(HUNDRED)) + "%";
 
         Object[] csvRecord = {
@@ -75,8 +77,8 @@ public class CsvExporter implements Exporter {
                 payment.getIssuerCountry(),
                 formatNumber(numberOfSecurities),
                 formatNumber(paymentPerPaper),
-                formatNumber(paymentsWithTaxes),
                 formatNumber(payment.getCommission()),
+                formatNumber(amountBeforeTax),
                 formatNumber(taxes),
                 formattedTaxPercent,
                 formatNumber(payment.getTotalPaymentAmount()),
@@ -87,12 +89,8 @@ public class CsvExporter implements Exporter {
         return csvRecord;
     }
 
-    private BigDecimal fetchPaymentsWithTaxes(BigDecimal paymentPerPaper, BigDecimal numberOfSecurities) {
-        return numberOfSecurities.multiply(paymentPerPaper);
-    }
-
-    private BigDecimal fetchTaxPercent(BigDecimal taxes, BigDecimal paymentsWithTaxes) {
-        return taxes.divide(paymentsWithTaxes, RoundingMode.HALF_UP);
+    private BigDecimal fetchTaxPercent(BigDecimal taxes, BigDecimal amountBeforeTax) {
+        return taxes.divide(amountBeforeTax, RoundingMode.HALF_UP);
     }
 
     private String formatNumber(Number number) {

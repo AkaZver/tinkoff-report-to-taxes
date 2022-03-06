@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Log4j2
 public class DividendPaymentMapper {
 
-    private static final int NORMAL_ROW_SIZE = 12;
+    private static final int NORMAL_ROW_SIZE = 13;
     private static final DateTimeFormatter PDF_DATE_FORMAT = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     public DividendPayment map(List<RectangularTextContainer<?>> row) {
@@ -38,9 +38,10 @@ public class DividendPaymentMapper {
                 .numberOfSecurities(fetchBigDecimal(row.get(6)))
                 .paymentPerPaper(fetchBigDecimal(row.get(7)))
                 .commission(fetchBigDecimal(row.get(8)))
-                .taxes(fetchBigDecimal(row.get(9)))
-                .totalPaymentAmount(fetchBigDecimal(row.get(10)))
-                .currency(fetchString(row.get(11)))
+                .amountBeforeTax(fetchBigDecimal(row.get(9)))
+                .taxes(fetchBigDecimal(row.get(10)))
+                .totalPaymentAmount(fetchBigDecimal(row.get(11)))
+                .currency(fetchString(row.get(12)))
                 .build();
 
         log.trace("<< map: payment={}", payment);
